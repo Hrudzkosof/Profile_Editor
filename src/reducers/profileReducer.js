@@ -1,3 +1,5 @@
+// Initial state for the profile, retrieved from localStorage if available, 
+// otherwise defaults to an empty profile object.
 const initialState = (() => {
   const savedProfile = localStorage.getItem("profile");
   return savedProfile ? JSON.parse(savedProfile) : {
@@ -15,7 +17,7 @@ const initialState = (() => {
   };
 })();
 
-// Редьюсер для управления состоянием профиля
+// Reducer function to manage the profile state
 export const profileReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET_FIELD':
@@ -29,16 +31,18 @@ export const profileReducer = (state = initialState, action) => {
   }
 };
 
-// Действия для редьюсера
+// Action to set the avatar image
 export const setAvatar = (avatar) => ({
   type: 'SET_AVATAR',
   payload: avatar,
 });
 
+// Action to reset the profile to its default state
 export const resetProfile = () => ({
   type: 'RESET_PROFILE',
 });
 
+// Action to update a specific field in the profile
 export const setField = (field, value) => ({
   type: 'SET_FIELD',
   payload: { field, value },
