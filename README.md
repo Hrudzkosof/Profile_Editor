@@ -1,3 +1,61 @@
+# Profile Editor Application
+
+### Author: Sofiia Hrudzko
+
+---
+
+## Project Overview
+
+The **Profile Editor Application** provides an interactive interface for managing user profiles. It allows users to:
+- Edit profile information.
+- Upload and preview avatar images.
+- Add and manage tags, potential interests, and external links.
+- Upload and manage project and task files.
+
+The application uses **React**, **Redux**, and **LocalStorage** for efficient state management and data persistence.
+
+---
+
+## Features
+
+1. **Profile Management**:
+   - Editable fields for name, lastname, job title, phone, email, address, and pitch.
+   - Avatar upload with live preview.
+   - Profile visibility toggle (Private or Public).
+
+2. **Dynamic Tag Management**:
+   - Add, edit, and delete interests and potential interests.
+   - Persistent changes using `localStorage`.
+
+3. **Link Management**:
+   - Add and manage external links with site name and URL.
+   - Persistent across sessions.
+
+4. **File Uploading**:
+   - Manage project and task files with metadata (name, size, type).
+   - File lists dynamically updated on upload or removal.
+
+5. **Persistent Data**:
+   - All profile details, tags, links, and files are saved in `localStorage` and restored on page reload.
+
+6. **Modular Architecture**:
+   - Centralized state management with **Redux**.
+   - Efficient form handling using **react-hook-form**.
+
+---
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+
+
+
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -68,3 +126,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+'1
+
+
+

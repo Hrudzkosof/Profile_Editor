@@ -1,0 +1,257 @@
+.mainContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+  }
+  
+  .createFilesContainer {
+    flex: 1;
+  }
+  
+  .formContainer {
+    flex: 0 0 382.5px; 
+  }
+  
+  
+  .profileForm {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 15.3px;
+    background: white;
+    z-index: 1;
+    overflow: hidden;
+    width: 100%;
+    margin: 38.25px auto;
+    border-radius: 7.65px;
+    margin-left: auto;
+  }
+  
+
+.profileForm {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 15.3px;
+    background: white;
+    z-index: 1;
+    overflow: hidden;
+    width: 382.5px; 
+    height: auto;
+    margin: 15px auto;
+    border-radius: 7.65px; 
+}
+
+.profileForm::before {
+    content: '';
+    position: absolute;
+    top: -1.53px; 
+    left: -1.53px; 
+    right: -1.53px; 
+    bottom: -1.53px; 
+    background: linear-gradient(to bottom, #e9f2f3, #a6c5e3);
+    z-index: -1;
+}
+
+.profileForm input {
+    padding: 11.475px; 
+    border-radius: 3.825px; 
+    margin: 3.825px 0; 
+    width: 100%;
+    max-width: 344.25px; 
+    box-sizing: border-box;
+    border: 1.53px solid rgba(180, 169, 169, 0.637); 
+    background: inherit;
+    color: #333;
+    font-size: 12.24px; 
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.avatarContainer {
+    width: 100px; 
+    height: 100px;
+    border-radius: 50%;
+    background-color: #e0e0e0; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; 
+    cursor: pointer;
+    margin-left: 32%;
+}
+
+.avatarImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+  }
+  
+
+.avatarContainer > svg {
+    width: 22.95px; 
+    height: 22.95px; 
+}
+
+.formField > p {
+    margin: 0 3.06px; 
+}
+
+.formField {
+    padding: 5.355px;
+    font-size: 15.3px;
+    color: #5e5d5d;
+}
+
+.buttons {
+    display: flex;
+    gap: 15.3px; 
+    justify-content: center;
+    margin-top: 11.475px; 
+    
+}
+
+
+.saveButton {
+    padding: 11.475px 40px; 
+    border-radius: 3.825px; 
+    border: 1.53px solid rgba(180, 169, 169, 0.637); 
+    color: #5e5d5d;
+    font-size: 12.24px; 
+    font-weight: 400;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    flex: 1;
+    max-width: 310px; 
+    background-color: #abbfd4;
+    
+}
+
+.saveButton:hover,
+.resetButton:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-color: #333;
+}
+
+.radioGroup {
+    display: flex;
+    gap: 15.3px; 
+    align-items: center;
+    margin-top: 6.12px; 
+}
+
+.radioLabel {
+    display: flex;
+    align-items: center;
+    gap: 3.825px; 
+    font-size: 15.3px; 
+    color: #5e5d5d;
+    margin-left: 3.825px; 
+}
+
+.radioLabel input[type="radio"] {
+    cursor: pointer;
+}
+
+.addButton {
+    background: none;
+    border: none;
+    color: #007bff;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s ease, transform 0.2s ease;
+    
+    
+}
+
+.addButton:hover {
+    color: #0056b3;
+}
+
+.addButton:active {
+    transform: translateY(2px);
+}
+
+.linkInput {
+    width: 100%;
+    padding: 4.275px; 
+    font-size: 10.71px; 
+}
+
+.linkInput:focus {
+    border-bottom: 1.53px solid #007bff; 
+    transition: border-bottom 0.3s ease;
+}
+
+
+.linkRow {
+    display: flex;
+    gap: 7.65px; 
+}
+
+.tagsContainer,
+.linksContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+
+.tag {
+    color: #686767;
+    border: 0.765px solid #9e9e9e; 
+    border-radius: 7.65px; 
+    padding: 4.275px 7.65px; 
+    font-size: 13.005px; 
+    display: flex;
+    align-items: center;
+    gap: 4.275px; 
+}
+
+.removeTag {
+    background: none;
+    border: none;
+    color: rgba(90, 90, 90, 0.61);
+    cursor: pointer;
+    font-size: 12.24px; 
+}
+
+.tagInput {
+    width: 100%;
+    border: none;
+    border-bottom: 0.765px solid #ccc; 
+    outline: none;
+    padding: 4.275px; 
+    font-size: 10.71px; 
+}
+
+.tagInput:focus {
+    border-bottom: 1.53px solid #007bff; 
+    transition: border-bottom 0.3s ease;
+}
+
+.formFieldLinks {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+.removeLinkButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+  }
+  
+  
