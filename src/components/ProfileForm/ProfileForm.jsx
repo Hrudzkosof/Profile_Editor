@@ -239,7 +239,7 @@ export default function ProfileForm() {
 
 
             <div className={s.formField}>
-              <input placeholder="Phone" {...register("phone", { required: true, 
+              <input placeholder="Phone" {...register("phone", { required: "The field is required.", 
                 pattern: {
                   value: /^\+\d{10,14}$/, 
                   message: "Phone number must be in the format +<country code><number> (e.g., +79999999999)."
