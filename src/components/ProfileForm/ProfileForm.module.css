@@ -254,4 +254,13 @@
     margin-left: 10px;
   }
   
-  
+
+  .errors{
+    height: 13px;
+    margin: -4px 7px 10px;
+    color: rgb(223, 106, 106);
+    font-size: 13px;
+   
+  }
+
+

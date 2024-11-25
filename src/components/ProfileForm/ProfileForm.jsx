@@ -6,6 +6,7 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import { setAvatar } from "../../reducers/profileReducer";
 import s from "./ProfileForm.module.css";
 import CreateFiles from "../CreateFiles/CreateFiles";
+import { BiErrorCircle } from "react-icons/bi";
 
 export default function ProfileForm() {
   const profile = useSelector((state) => state.profile); // Get profile data from Redux state
@@ -17,8 +18,9 @@ export default function ProfileForm() {
   const [links, setLinks] = useState([]); // State for managing external links
   const [profileVisibility, setProfileVisibility] = useState("Private"); // State for profile visibility (Private/Public)
 
-  const { register, setValue, watch, reset, handleSubmit } = useForm({
+  const { register, setValue, watch, reset, handleSubmit, formState: { errors } } = useForm({
     defaultValues: profile, // Set initial form values to Redux profile data
+    mode: "onBlur" // Validate inputs on blur
   });
 
   const avatar = watch("avatar"); // Watch for changes in the avatar field
@@ -123,15 +125,20 @@ export default function ProfileForm() {
   // Handle form submission
   const onSubmit = (data) => {
     const updatedProfile = {
-      ...data, // Form data
+      ...data, // Include form data
       tags,
       potentialTags,
       links,
       profileVisibility,
     };
-    localStorage.setItem("profile", JSON.stringify(updatedProfile)); // Save profile to localStorage
+
+    console.log("Updated Profile Data:", updatedProfile);
+  
+    localStorage.setItem("profile", JSON.stringify(updatedProfile)); // Save to localStorage
+  
     alert("Profile saved successfully!"); // Notify user
   };
+
 
   return (
     <div className={s.mainContainer}>
@@ -165,26 +172,120 @@ export default function ProfileForm() {
 
             {/* Form Fields */}
             <div className={s.formField}>
-              <input placeholder="Name" {...register("name", { required: true })} />
+              <input placeholder="Name" {...register("name", { required: "The field is required.",
+                minLength: {
+                  value: 2,
+                  message: "Min. of 2 characters required."
+                }, 
+                maxLength: {
+                  value: 50,
+                  message: "Max. of 50 characters allowed."
+                }, 
+                pattern: {
+                  value: /^[A-Za-zА-Яа-яёЁ\s-]+$/, 
+                  message: "Only letters, spaces, and hyphens are allowed."
+                }
+              }
+            
+              )} />
             </div>
+            <div className={s.errors}>
+            {errors.name && <p> <BiErrorCircle/> {errors.name?.message}</p>}
+           
+            </div>
+
+
             <div className={s.formField}>
               <input
                 placeholder="Lastname"
-                {...register("lastname", { required: true })}
+                {...register("lastname", { required: "The field is required.",
+                  minLength: {
+                    value: 2,
+                    message: "Min. of 2 characters required."
+                  }, 
+                  maxLength: {
+                    value: 50,
+                    message: "Max. of 50 characters allowed."
+                  }, 
+                  pattern: {
+                    value: /^[A-Za-zА-Яа-яёЁ\s-]+$/, // Разрешены буквы, пробелы и дефис
+                    message: "Only letters, spaces, and hyphens are allowed."
+                  }
+                 })}
               />
             </div>
-            <div className={s.formField}>
-              <input placeholder="Job Title" {...register("jobTitle")} />
+
+            <div className={s.errors}>
+            {errors.lastname && <p> <BiErrorCircle/> {errors.lastname?.message}</p>}
+           
             </div>
+
+
             <div className={s.formField}>
-              <input placeholder="Phone" {...register("phone", { required: true })} />
+              <input placeholder="Job Title" {...register("jobTitle", {required: false,
+                maxLength: {
+                  value: 100,
+                  message: "Max. of 100 characters allowed."
+                },
+                pattern: {
+                  value: /^[A-Za-zА-Яа-яёЁ0-9\s]+$/, 
+                  message: "Only letters, numbers, and spaces are allowed."
+                }
+              })} />
             </div>
+            <div className={s.errors}>
+            {errors.jobTitle && <p> <BiErrorCircle/> {errors.jobTitle?.message}</p>}
+            </div>
+
+
             <div className={s.formField}>
-              <input placeholder="Email" {...register("email", { required: true })} />
+              <input placeholder="Phone" {...register("phone", { required: true, 
+                pattern: {
+                  value: /^\+\d{10,14}$/, 
+                  message: "Phone number must be in the format +<country code><number> (e.g., +79999999999)."
+                }
+
+
+               })} />
             </div>
+            <div className={s.errors}>
+            {errors.phone && <p> <BiErrorCircle/> {errors.phone?.message}</p>}
+            </div>
+
+            
             <div className={s.formField}>
-              <input placeholder="Address" {...register("address")} />
+              <input placeholder="Email" {...register("email", { required: "The field is required.",
+               pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 
+                message: "Invalid email format. Please enter a valid email address."
+              },
+              maxLength: {
+                value: 320, 
+                message: "Email must be less than 320 characters."
+              }
+               })} />
             </div>
+            <div className={s.errors}>
+            {errors.email && <p> <BiErrorCircle/> {errors.email?.message}</p>}
+            </div>
+
+
+            <div className={s.formField}>
+              <input placeholder="Address" {...register("address", {required: false,
+                maxLength: {
+                  value: 200, 
+                  message:  "Max. of 200 characters allowed."
+                },
+                pattern: {
+                  value: /^[A-Za-zА-Яа-яёЁ0-9\s,.-]+$/, 
+                  message: "Only letters, numbers, commas, dots, hyphens, and spaces are allowed."
+                }
+              })} />
+            </div>
+            <div className={s.errors}>
+            {errors.address && <p> <BiErrorCircle/> {errors.address?.message}</p>}
+            </div>
+
             <div className={s.formField}>
               <input placeholder="Pitch" {...register("pitch")} />
             </div>
@@ -215,174 +316,202 @@ export default function ProfileForm() {
             </div>
 
             {/* The scopes of your interest */}
-            <div className={s.formField}>
-              <div className={s.formFieldLinks}>
-                <p>The scopes of your interest:</p>
-                {!tags.length && (
-                  <button type="button" className={s.addButton} onClick={addTag}>
-                    +
-                  </button>
-                )}
-              </div>
-              <div className={s.tagsContainer}>
-                {tags.map((tag, index) =>
-                  tag === "" ? (
-                    <input
-                      key={`scope-input-${index}`}
-                      type="text"
-                      placeholder="Add a tag"
-                      className={s.tagInput}
-                      autoFocus
-                      onBlur={(e) => {
+                      <div className={s.formField}>
+            <div className={s.formFieldLinks}>
+              <p>The scopes of your interest:</p>
+              {!tags.length && (
+                <button type="button" className={s.addButton} onClick={addTag}>
+                  +
+                </button>
+              )}
+            </div>
+            <div className={s.tagsContainer}>
+              {tags.map((tag, index) =>
+                tag === "" ? (
+                  <input
+                    key={`scope-input-${index}`}
+                    type="text"
+                    placeholder="Add a tag"
+                    className={s.tagInput}
+                    autoFocus
+                    maxLength={30} 
+                    onBlur={(e) => {
+                      const newTag = e.target.value.trim();
+                      if (newTag) {
+                        if (!/^[A-Za-zА-Яа-яёЁ0-9\s,.]+$/.test(newTag)) {
+                          alert("Tags can only contain letters, numbers, spaces, commas, and dots.");
+                          return;
+                        }
+                        updateTags(newTag, index, setTags, tags);
+                      } else {
+                        removeTag(index, setTags, tags);
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
                         const newTag = e.target.value.trim();
                         if (newTag) {
+                          if (!/^[A-Za-zА-Яа-яёЁ0-9\s,.]+$/.test(newTag)) {
+                            alert("Tags can only contain letters, numbers, spaces, commas, and dots.");
+                            return;
+                          }
                           updateTags(newTag, index, setTags, tags);
                         } else {
                           removeTag(index, setTags, tags);
                         }
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          e.preventDefault();
-                          const newTag = e.target.value.trim();
-                          if (newTag) {
-                            updateTags(newTag, index, setTags, tags);
-                          } else {
-                            removeTag(index, setTags, tags);
-                          }
-                        }
-                      }}
-                    />
-                  ) : (
-                    <span key={index} className={s.tag}>
-                      {tag}
-                      <button
-                        type="button"
-                        className={s.removeTag}
-                        onClick={() => removeTag(index, setTags, tags)}
-                      >
-                        ×
-                      </button>
-                    </span>
-                  )
-                )}
-                {tags.length > 0 && (
-                  <button type="button" className={s.addButton} onClick={addTag}>
-                    +
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* Potential interests */}
-            <div className={s.formField}>
-              <div className={s.formFieldLinks}>
-                <p>Potential interests:</p>
-                {!potentialTags.length && (
-                  <button type="button" className={s.addButton} onClick={addPotentialTag}>
-                    +
-                  </button>
-                )}
-              </div>
-              <div className={s.tagsContainer}>
-                {potentialTags.map((tag, index) =>
-                  tag === "" ? (
-                    <input
-                      key={`potential-input-${index}`}
-                      type="text"
-                      placeholder="Add a tag"
-                      className={s.tagInput}
-                      autoFocus
-                      onBlur={(e) => {
-                        const newTag = e.target.value.trim();
-                        if (newTag) {
-                          updateTags(newTag, index, setPotentialTags, potentialTags);
-                        } else {
-                          removeTag(index, setPotentialTags, potentialTags);
-                        }
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          e.preventDefault();
-                          const newTag = e.target.value.trim();
-                          if (newTag) {
-                            updateTags(newTag, index, setPotentialTags, potentialTags);
-                          } else {
-                            removeTag(index, setPotentialTags, potentialTags);
-                          }
-                        }
-                      }}
-                    />
-                  ) : (
-                    <span key={index} className={s.tag}>
-                      {tag}
-                      <button
-                        type="button"
-                        className={s.removeTag}
-                        onClick={() =>
-                          removeTag(index, setPotentialTags, potentialTags)
-                        }
-                      >
-                        ×
-                      </button>
-                    </span>
-                  )
-                )}
-                {potentialTags.length > 0 && (
-                  <button
-                    type="button"
-                    className={s.addButton}
-                    onClick={addPotentialTag}
-                  >
-                    +
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* Links */}
-            <div className={s.formField}>
-              <div className={s.formFieldLinks}>
-                <p>Your links:</p>
-                {!links.length && (
-                  <button type="button" className={s.addButton} onClick={addLinkField}>
-                    +
-                  </button>
-                )}
-              </div>
-              <div className={s.linksContainer}>
-                {links.map((linkObj, index) => (
-                  <div key={index} className={s.linkRow}>
-                    <input
-                      type="text"
-                      placeholder="Site name"
-                      value={linkObj.siteName}
-                      onChange={(e) => updateLink(e.target.value, index, "siteName")}
-                      className={s.linkInput}
-                    />
-                    <input
-                      type="url"
-                      placeholder="Link"
-                      value={linkObj.link}
-                      onChange={(e) => updateLink(e.target.value, index, "link")}
-                      className={s.linkInput}
-                    />
+                      }
+                    }}
+                  />
+                ) : (
+                  <span key={index} className={s.tag}>
+                    {tag}
                     <button
                       type="button"
-                      className={s.removeLinkButton}
-                      onClick={() => removeLink(index)}
+                      className={s.removeTag}
+                      onClick={() => removeTag(index, setTags, tags)}
                     >
-                      <FaRegTrashCan />
+                      ×
                     </button>
-                  </div>
-                ))}
-                {links.length > 0 && (
-                  <button type="button" className={s.addButton} onClick={addLinkField}>
-                    +
-                  </button>
-                )}
-              </div>
+                  </span>
+                )
+              )}
+              {tags.length > 0 && tags.length < 10 && ( 
+                <button type="button" className={s.addButton} onClick={addTag}>
+                  +
+                </button>
+              )}
             </div>
+          </div>
+
+
+           {/* Potential interests */}
+                <div className={s.formField}>
+                  <div className={s.formFieldLinks}>
+                    <p>Potential interests:</p>
+                    {!potentialTags.length && (
+                      <button type="button" className={s.addButton} onClick={addPotentialTag}>
+                        +
+                      </button>
+                    )}
+                  </div>
+                  <div className={s.tagsContainer}>
+                    {potentialTags.map((tag, index) =>
+                      tag === "" ? (
+                        <input
+                          key={`potential-input-${index}`}
+                          type="text"
+                          placeholder="Add a tag"
+                          className={s.tagInput}
+                          autoFocus
+                          maxLength={30} 
+                          onBlur={(e) => {
+                            const newTag = e.target.value.trim();
+                            if (newTag) {
+                              if (!/^[A-Za-zА-Яа-яёЁ0-9\s,.]+$/.test(newTag)) {
+                                alert("Tags can only contain letters, numbers, spaces, commas, and dots.");
+                                return;
+                              }
+                              updateTags(newTag, index, setPotentialTags, potentialTags);
+                            } else {
+                              removeTag(index, setPotentialTags, potentialTags);
+                            }
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              e.preventDefault();
+                              const newTag = e.target.value.trim();
+                              if (newTag) {
+                                if (!/^[A-Za-zА-Яа-яёЁ0-9\s,.]+$/.test(newTag)) {
+                                  alert("Tags can only contain letters, numbers, spaces, commas, and dots.");
+                                  return;
+                                }
+                                updateTags(newTag, index, setPotentialTags, potentialTags);
+                              } else {
+                                removeTag(index, setPotentialTags, potentialTags);
+                              }
+                            }
+                          }}
+                        />
+                      ) : (
+                        <span key={index} className={s.tag}>
+                          {tag}
+                          <button
+                            type="button"
+                            className={s.removeTag}
+                            onClick={() => removeTag(index, setPotentialTags, potentialTags)}
+                          >
+                            ×
+                          </button>
+                        </span>
+                      )
+                    )}
+                    {potentialTags.length > 0 && potentialTags.length < 10 && ( 
+                      <button
+                        type="button"
+                        className={s.addButton}
+                        onClick={addPotentialTag}
+                      >
+                        +
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+        {/* Links */}
+                  <div className={s.formField}>
+                    <div className={s.formFieldLinks}>
+                      <p>Your links:</p>
+                      {!links.length && (
+                        <button type="button" className={s.addButton} onClick={addLinkField}>
+                          +
+                        </button>
+                      )}
+                    </div>
+                    <div className={s.linksContainer}>
+                      {links.map((linkObj, index) => (
+                        <div key={index} className={s.linkRow}>
+                          <input
+                            type="text"
+                            placeholder="Site name"
+                            value={linkObj.siteName}
+                            onChange={(e) => updateLink(e.target.value, index, "siteName")}
+                            className={s.linkInput}
+                          />
+                          <input
+                            type="url"
+                            placeholder="Link"
+                            value={linkObj.link}
+                            maxLength={200} 
+                            onBlur={(e) => {
+                              const url = e.target.value.trim();
+                              if (
+                                url &&
+                                !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(url) 
+                              ) {
+                                alert("Invalid link format. Please make sure the link starts with http:// or https://");
+                              }
+                            }}
+                            onChange={(e) => updateLink(e.target.value, index, "link")}
+                            className={s.linkInput}
+                          />
+                          <button
+                            type="button"
+                            className={s.removeLinkButton}
+                            onClick={() => removeLink(index)}
+                          >
+                            <FaRegTrashCan />
+                          </button>
+                        </div>
+                      ))}
+                      {links.length > 0 && links.length < 10 && ( 
+                        <button type="button" className={s.addButton} onClick={addLinkField}>
+                          +
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
 
             {/* Save Button */}
             <div className={s.buttons}>
